@@ -4,22 +4,24 @@ import AddSong from './components/AddSong';
 import Header from './components/Header';
 import SongList from './components/SongList';
 import SongPlayer from './components/SongPlayer';
-import { createMuiTheme, makeStyles} from '@material-ui/core/styles';
+import { createMuiThemeG} from '@material-ui/core/styles';
 import {MuiThemeProvider, CssBaseline} from '@material-ui/core'
-import { themeDark, themeMain } from './theme';
+import { themeDark, themeMain} from './theme';
+import './App.css'
 
 
 function App() {
-
 
   const [theme, setTheme] = useState(true)
  
   const appliedTheme =  createMuiTheme(!theme ? themeDark : themeMain)
 
+
   const handleChangeTheme = () =>{
     console.log(themeDark)
     setTheme(!theme);
   };
+
 
   return (
     <>
@@ -33,7 +35,7 @@ function App() {
             <AddSong />
             <SongList />
           </Grid>
-          <Grid  item xs={12} md={5}>
+          <Grid item xs={12} md={5}>
             <SongPlayer />
           </Grid>
         </Grid>
