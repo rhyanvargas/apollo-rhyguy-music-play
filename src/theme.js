@@ -1,9 +1,15 @@
-import { createMuiTheme } from '@material-ui/core/styles';
+
 import { purple } from '@material-ui/core/colors';
 
 const COLORS = {
   PURPLE: purple[500], // Purple and green play nicely together.
   GREEN:  '#11cb5f'  // This is green.A700 as hex.
+}
+
+export const customStyles = {
+  imgResponsive: {
+    width:'100%'
+  },
 }
 
 export const themeMain = {
@@ -18,18 +24,12 @@ export const themeMain = {
   },
 };
 
-
 export const themeDark = {
   
   palette: {
     ...themeMain.palette,
-    type: 'dark',
-    // primary: {
-    //   main: themeMain.palette.secondary.main
-    // },
-    // secondary: {
-    //   main: themeMain.palette.primary.main,
-    // },
+    type: 'dark'
   },
 };
+
 

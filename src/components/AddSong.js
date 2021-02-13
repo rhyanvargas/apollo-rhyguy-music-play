@@ -1,10 +1,12 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField,makeStyles, Container } from '@material-ui/core'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField,makeStyles } from '@material-ui/core'
 import { AddBoxOutlined, Link } from '@material-ui/icons'
 import InputAdornment from '@material-ui/core/InputAdornment';
 import React, { useState } from 'react'
+import {customStyles} from '../theme.js'
 
 
 const useStyles = makeStyles(theme => ({
+    ...customStyles,
     container: {
         display: 'flex',
         alignItems: 'center'
@@ -36,6 +38,7 @@ export default function AddSong() {
     const handleCloseDialog = () => {
         setDialog(false);
     }
+
     return (
         <div className={classes.container}>
             <Dialog
@@ -44,7 +47,7 @@ export default function AddSong() {
                 onClose={handleCloseDialog} >
                     <DialogTitle></DialogTitle>
                     <DialogContent>
-                        <img src={imgUrl} alt={imgName}/>
+                        <img className={classes.imgResponsive} src={imgUrl} alt={imgName}/>
                         <TextField 
                             margin="dense"
                             name="artist"

@@ -4,7 +4,7 @@ import AddSong from './components/AddSong';
 import Header from './components/Header';
 import SongList from './components/SongList';
 import SongPlayer from './components/SongPlayer';
-import { createMuiThemeG} from '@material-ui/core/styles';
+import { createMuiTheme} from '@material-ui/core/styles';
 import {MuiThemeProvider, CssBaseline} from '@material-ui/core'
 import { themeDark, themeMain} from './theme';
 import './App.css'
