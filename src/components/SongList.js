@@ -9,7 +9,7 @@ import {
 	makeStyles,
 } from "@material-ui/core";
 import { PlayArrow, Save } from "@material-ui/icons";
-import React from "react";
+import React from "react"
 
 const useStyles = makeStyles(theme => ({
 	card: {
