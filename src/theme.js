@@ -1,9 +1,10 @@
 
-import { purple } from '@material-ui/core/colors';
+import { purple, red } from '@material-ui/core/colors';
 
 const COLORS = {
   PURPLE: purple[500], // Purple and green play nicely together.
-  GREEN:  '#11cb5f'  // This is green.A700 as hex.
+  GREEN:  '#11cb5f',  // This is green.A700 as hex.
+  RED: red[500]
 }
 
 export const customStyles = {
@@ -19,6 +20,9 @@ export const themeMain = {
     },
     secondary: {
       main: COLORS.PURPLE,
+    },
+    error: {
+      main: COLORS.RED
     },
     type: 'light',
   },

@@ -6,9 +6,11 @@ To implement MaterialUI custom themeing to a React App and utilize graphQL queri
 
 ## Tech Stack
 - React
-- Apollo
-- GraphQL
+- Apollo `*`
+- GraphQL `*`
 - MaterialUI
+
+`* Future enhancement to add data and app functionality`
 
 # Getting Started with Create React App
 

@@ -2,6 +2,7 @@ import {
 	Card,
 	CardContent,
 	CardMedia,
+	Hidden,
 	IconButton,
 	makeStyles,
 	Slider,
@@ -83,7 +84,10 @@ export default function SongPlayer() {
 					image="http://unsplash.it/g/500?random"
 				/>
 			</Card>
-			<QueuedSongList />
+			<Hidden smDown={true}>
+				<QueuedSongList />
+			</Hidden>
+
 		</>
 	);
 }
