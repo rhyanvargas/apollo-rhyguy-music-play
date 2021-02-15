@@ -9,7 +9,6 @@ import {
 	Typography,
 } from "@material-ui/core";
 import { PlayArrow, SkipNext, SkipPrevious } from "@material-ui/icons";
-import { findByLabelText } from "@testing-library/react";
 import React from "react";
 import QueuedSongList from "./QueuedSongList";
 
