@@ -1,3 +1,4 @@
+import { useQuery } from "@apollo/react-hooks";
 import {
 	Card,
 	CardContent,
@@ -9,31 +10,34 @@ import {
 	makeStyles,
 } from "@material-ui/core";
 import { PlayArrow, Save } from "@material-ui/icons";
-import React from "react"
+import React from "react";
+import { GET_SONGS } from "../graphql/queries";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
 	card: {
 		display: "flex",
 		justifyContent: "space-between",
-		margin: `${theme.spacing(3)}px ${theme.spacing(2)}px`
+		margin: `${theme.spacing(3)}px ${theme.spacing(2)}px`,
 	},
 	thumbnail: {
-		objectFit: 'cover',
+		objectFit: "cover",
 		width: 140,
-		height: 140
+		height: 140,
 	},
 	content: {
-		flexGrow: 1 
-	}
-}))
+		flexGrow: 1,
+	},
+}));
 
 export default function SongList() {
-	const loading = false;
-	const song = {
-		title: "Purple Rain",
-		artist: "Jimmy Hendrix",
-		thumbnail: "http://unsplash.it/g/500?random&blur&gravity=center",
-	};
+	const { data, loading, error } = useQuery(GET_SONGS);
+
+	// const song = {
+	// 	title: "S.Y.A.A.H",
+	// 	artist: "Luis Guanzon",
+	// 	thumbnail: "https://i.ytimg.com/an_webp/2qO1RIDgUSo/mqdefault_6s.webp?du=3000&sqp=CKTY1oEG&rs=AOn4CLA2lMWjigyhgDx429WmEEWu_q8GYg",
+	// 	url: "https://www.youtube.com/watch?v=2qO1RIDgUSo"
+	// };
 
 	if (loading) {
 		return (
@@ -49,43 +53,47 @@ export default function SongList() {
 		);
 	}
 
+	if (error) {
+		console.log(error);
+		return <div>Error fetching songs</div>;
+	}
+
 	return (
 		<div>
-			{Array.from({ length: 10 }, () => song).map((song, i) => (
-				<Song key={i} song={song} />
+			{data.songs.map((song) => (
+				<Song key={song.id} song={song} />
 			))}
 		</div>
 	);
 }
 
-
-function Song({song}) {
-	const {title,thumbnail,artist} = song;
+function Song({ song }) {
+	const { title, thumbnail, artist } = song;
 	const classes = useStyles();
 	return (
-		<Card className={classes.card} >
-				<CardMedia className={classes.thumbnail} image={thumbnail} />
-					<CardContent className={classes.content}>
-						<Typography gutterBottom variant="h5" component="h2">
-							{title}
-						</Typography>
-						<Typography
-							gutterBottom
-							variant="body1"
-							component="p"
-							color="textSecondary"
-						>
-							{artist}
-						</Typography>
-					</CardContent>
-					<CardActions>
-						<IconButton size="small" color="primary">
-							<PlayArrow />
-						</IconButton>
-						<IconButton size="small" color="secondary">
-							<Save />
-						</IconButton>
-					</CardActions>
+		<Card className={classes.card}>
+			<CardMedia className={classes.thumbnail} image={thumbnail} />
+			<CardContent className={classes.content}>
+				<Typography gutterBottom variant="h5" component="h2">
+					{title}
+				</Typography>
+				<Typography
+					gutterBottom
+					variant="body1"
+					component="p"
+					color="textSecondary"
+				>
+					{artist}
+				</Typography>
+			</CardContent>
+			<CardActions>
+				<IconButton size="small" color="primary">
+					<PlayArrow />
+				</IconButton>
+				<IconButton size="small" color="secondary">
+					<Save />
+				</IconButton>
+			</CardActions>
 		</Card>
 	);
 }
