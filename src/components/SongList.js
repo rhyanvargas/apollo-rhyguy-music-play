@@ -32,13 +32,6 @@ const useStyles = makeStyles((theme) => ({
 export default function SongList() {
 	const { data, loading, error } = useQuery(GET_SONGS);
 
-	// const song = {
-	// 	title: "S.Y.A.A.H",
-	// 	artist: "Luis Guanzon",
-	// 	thumbnail: "https://i.ytimg.com/an_webp/2qO1RIDgUSo/mqdefault_6s.webp?du=3000&sqp=CKTY1oEG&rs=AOn4CLA2lMWjigyhgDx429WmEEWu_q8GYg",
-	// 	url: "https://www.youtube.com/watch?v=2qO1RIDgUSo"
-	// };
-
 	if (loading) {
 		return (
 			<div

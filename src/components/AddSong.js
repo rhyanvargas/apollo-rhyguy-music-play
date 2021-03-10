@@ -1,8 +1,12 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField,makeStyles } from '@material-ui/core'
 import { AddBoxOutlined, Link } from '@material-ui/icons'
 import InputAdornment from '@material-ui/core/InputAdornment';
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import {customStyles} from '../theme.js'
+import ReactPlayer from 'react-player'
+import YoutubePlayer from 'react-player/lib/players/YouTube'
+import { useMutation } from '@apollo/client';
+import {ADD_SONG} from '../graphql/mutations'
 
 
 const useStyles = makeStyles(theme => ({
@@ -25,19 +29,84 @@ const useStyles = makeStyles(theme => ({
 
 
 export default function AddSong() {
+    // STYLES
     const classes = useStyles();
-
+    const [addSong] = useMutation(ADD_SONG)
+    // STATE
     const [dialog, setDialog] = useState(false)
-    const imgUrl = 'http://unsplash.it/500?random&gravity=center'
-    const imgName = 'dummy'
+    const [url, setUrl] = useState('')
+    const [playable, setPlayable] = useState(false)
+    const [song, setSong] = useState({
+        title:'',
+        duration:0,
+        artist:'',
+        thumbnail:''
+    })
 
+    // EFFECTS
+    useEffect(() => {
+       const isPlayable = YoutubePlayer.canPlay(url);
+       setPlayable(isPlayable)
+
+    }, [url])
+   
+    // HANDLERS
+
+    const handleChangeSong = (event) => {
+        const {name, value} = event.target;
+        setSong(prevSong => (
+            {
+                ...prevSong,
+                [name]: value
+            }
+        ))
+    }
+    
+    const handleCloseDialog = () => {
+        setDialog(false);
+    }
+
+   const handleAddSong = () => {
+    addSong();
+   }
+
+    const handleEditSong = async ({player}) => {
+        const nestedPlayer = player.player.player;
+        let songData;
+
+        if(nestedPlayer.getVideoData) {
+            songData = getYoutubeInfo(nestedPlayer)
+        } 
+        const {title, artist, duration,thumbnail} = songData
+        setSong({
+            title,
+            artist,
+            duration,
+            thumbnail
+        })
+    }
+    
+    const getYoutubeInfo = (player) => {
+      
+        const duration = player.getDuration();
+        const {title, video_id, author} = player.getVideoData();
+        const thumbnail = `http://img.youtube.com/vi/${video_id}/0.jpg`;
+        
+        return {
+            duration,
+            title,
+            artist: author,
+            thumbnail
+        }
+    }
+
+   
+    // DISPLAY
     const inputProps = {
         startAdornment: <InputAdornment position="start"><Link/></InputAdornment>,
     }
 
-    const handleCloseDialog = () => {
-        setDialog(false);
-    }
+    const {title, artist, thumbnail, duration} = song;
 
     return (
         <div className={classes.container}>
@@ -47,38 +116,54 @@ export default function AddSong() {
                 onClose={handleCloseDialog} >
                     <DialogTitle></DialogTitle>
                     <DialogContent>
-                        <img className={classes.imgResponsive} src={imgUrl} alt={imgName}/>
+                        <img className={classes.imgResponsive} src={thumbnail} alt={thumbnail.name}/>
                         <TextField 
+                            onChange={handleChangeSong}
+                            margin="dense"
+                            name="title"
+                            label="Title"
+                            fullWidth
+                            value={title}
+                        />
+                        <TextField 
+                            onChange={handleChangeSong}
                             margin="dense"
                             name="artist"
                             label="Artist"
                             fullWidth
+                            value={artist}
                         />
                         <TextField 
+                            onChange={handleChangeSong}
                             margin="dense"
                             name="thumbnail"
                             label="Thumbnail"
                             fullWidth
+                            value={thumbnail}
                         />
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleCloseDialog} >Cancel</Button>
-                        <Button  variant="outlined" color="primary">Add Song</Button>
+                        <Button  onClick={handleAddSong} variant="outlined" color="primary">Add Song</Button>
                     </DialogActions>
             </Dialog>
             <TextField
                 className={classes.urlInput}
-                placeholder="Add Youtube or Soundcloud Url"
+                placeholder="Add Youtube Url"
                 fullWidth
                 margin="normal"
                 type="url"
+                onChange={event => setUrl(event.target.value)}
+                value={url}
                 InputProps = {inputProps} />
             <Button 
-            onClick={()=>setDialog(true)}
+            onClick={() => setDialog(true)}
+                disabled={!playable}
                 color="primary" 
                 variant="contained"
                 endIcon={<AddBoxOutlined/>}
             >Add</Button>
+            <ReactPlayer url={url} onReady={handleEditSong}  hidden/>
         </div>
     )
 }
