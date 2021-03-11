@@ -47,7 +47,7 @@ export default function SongList() {
 	}
 
 	if (error) {
-		console.log(error);
+		console.error(error);
 		return <div>Error fetching songs</div>;
 	}
 

@@ -34,7 +34,7 @@ const splitLink = split(
 );
 
 const client = new ApolloClient({
-  link:splitLink,
+  link: splitLink,
   cache: cache
 })
 

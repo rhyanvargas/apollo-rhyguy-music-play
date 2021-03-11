@@ -8,9 +8,10 @@ import {
 	Slider,
 	Typography,
 } from "@material-ui/core";
-import { PlayArrow, SkipNext, SkipPrevious } from "@material-ui/icons";
-import React from "react";
+import { PlayArrow, SkipNext, SkipPrevious, Pause } from "@material-ui/icons";
+import {React,useContext} from "react";
 import QueuedSongList from "./QueuedSongList";
+import {SongContext} from '../App'
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -40,7 +41,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SongPlayer() {
+	const {state,dispatch} = useContext(SongContext)
+	const {artist, title,thumbnail, duration, id } = state.song
 	const classes = useStyles();
+
+	const handleTogglePlay = () => {
+		dispatch(state.isPlaying ? {type: "PAUSE_SONG"} : {type: "PLAY_SONG"});
+	}
 
 	return (
 		<>
@@ -49,10 +56,10 @@ export default function SongPlayer() {
 					<div className={classes.content}>
 						<CardContent>
 							<Typography variant="h5" component="h3">
-								Title
+								{title}
 							</Typography>
 							<Typography variant="subtitle1" component="p">
-								Artist
+								{artist}
 							</Typography>
 						</CardContent>
 					</div>
@@ -60,8 +67,9 @@ export default function SongPlayer() {
 						<IconButton aria-label="play/pause">
 							<SkipPrevious />
 						</IconButton>
-						<IconButton aria-label="play/pause">
-							<PlayArrow className={classes.controlsPlay} />
+						<IconButton onClick={handleTogglePlay} aria-label="play/pause">
+							{state.isPlaying ? <Pause className={classes.controlsPlay}/> :
+							<PlayArrow className={classes.controlsPlay} />}
 						</IconButton>
 						<IconButton aria-label="play/pause">
 							<SkipNext />
@@ -80,7 +88,7 @@ export default function SongPlayer() {
 				</div>
 				<CardMedia
 					className={classes.image}
-					image="http://unsplash.it/g/500?random"
+					image={thumbnail}
 				/>
 			</Card>
 			<Hidden smDown={true}>

@@ -1,5 +1,5 @@
 import { Grid, Hidden, useMediaQuery } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useState, createContext, useReducer, useContext } from "react";
 import AddSong from "./components/AddSong";
 import Header from "./components/Header";
 import SongList from "./components/SongList";
@@ -8,8 +8,25 @@ import { createMuiTheme, makeStyles, useTheme } from "@material-ui/core/styles";
 import { MuiThemeProvider, CssBaseline } from "@material-ui/core";
 import { themeDark, themeMain } from "./theme";
 import "./App.css";
+import { ProvidedRequiredArgumentsOnDirectivesRule } from "graphql/validation/rules/ProvidedRequiredArgumentsRule";
+import songReducer from './reducer'
+
+
+export const SongContext = createContext({
+	song: {
+		id: "03a3433f-9c0e-433a-a12a-dc0af15d6eae",
+		artist: "joji",
+		thumbnail: "http://img.youtube.com/vi/sADmwWhU5ZM/0.jpg",
+		title: "WORLD$TAR MONEY",
+		duration: 197,
+	}
+})
 
 function App() {
+
+	const initialSongState = useContext(SongContext);
+	const [state, dispatch] = useReducer(songReducer, initialSongState)
+
 	const [theme, setTheme] = useState(true);
 
 	const appliedTheme = createMuiTheme(!theme ? themeDark : themeMain);
@@ -44,6 +61,7 @@ function App() {
 
 	return (
 		<>
+		<SongContext.Provider value={{state, dispatch}}>
 			<MuiThemeProvider theme={appliedTheme}>
 				<CssBaseline />
 				<Grid container >
@@ -61,6 +79,7 @@ function App() {
 					</Grid>
 				</Grid>
 			</MuiThemeProvider>
+		</SongContext.Provider>
 		</>
 	);
 }
