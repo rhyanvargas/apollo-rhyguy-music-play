@@ -43,7 +43,7 @@ const DEFAULT_SONG = {
 export default function AddSong() {
 	// STYLES
 	const classes = useStyles();
-	const [addSong] = useMutation(ADD_SONG);
+	const [addSong, {error}] = useMutation(ADD_SONG);
 	// STATE
 	const [dialog, setDialog] = useState(false);
 	const [url, setUrl] = useState("");
@@ -57,6 +57,9 @@ export default function AddSong() {
 	}, [url]);
 
 	// HANDLERS
+	const handleError = (field) => {
+ 		return error?.graphQLErrors[0]?.extensions?.path?.includes(field)
+	}
 
 	const handleChangeSong = (event) => {
 		const { name, value } = event.target;
@@ -77,7 +80,7 @@ export default function AddSong() {
 				variables: {
 					url: url.length > 0 ? url : null,
 					thumbnail: thumbnail.length > 0 ? thumbnail : null,
-					duration: duration.length > 0 ? duration : null,
+					duration: duration > 0 ? duration : null,
 					title: title.length > 0 ? title : null,
 					artist: artist.length > 0 ? artist : null,
 				},
@@ -87,8 +90,8 @@ export default function AddSong() {
 			setSong(DEFAULT_SONG);
 			setUrl("");
 		} catch (error) {
-			console.error("⚠️ ERROR ADDING SONG: ", error);
-			alert("Please enter all info before you can add song");
+			console.dir(error);
+			// alert("Please enter all info before you can add song");
 		}
 	};
 
@@ -153,6 +156,8 @@ export default function AddSong() {
 						label="Title"
 						fullWidth
 						value={title}
+						error={handleError('title')}
+						helperText={handleError('title') && 'Fill out field'}
 					/>
 					<TextField
 						onChange={handleChangeSong}
@@ -161,6 +166,8 @@ export default function AddSong() {
 						label="Artist"
 						fullWidth
 						value={artist}
+						error={handleError('artist')}
+						helperText={handleError('artist') && 'Fill out field'}
 					/>
 					<TextField
 						onChange={handleChangeSong}
@@ -169,6 +176,8 @@ export default function AddSong() {
 						label="Thumbnail"
 						fullWidth
 						value={thumbnail}
+						error={handleError('thumbnail')}
+						helperText={handleError('thumbnail') && 'Fill out field'}
 					/>
 				</DialogContent>
 				<DialogActions>
