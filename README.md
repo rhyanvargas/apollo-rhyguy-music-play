@@ -6,11 +6,18 @@ To implement MaterialUI custom themeing to a React App and utilize graphQL queri
 
 ## Tech Stack
 - React
-- Apollo `*`
-- GraphQL `*`
+- Apollo 
+- GraphQL 
 - MaterialUI
 
-`* Future enhancement to add data and app functionality`
+## Concepts Used
+- `useState()`
+- `useContext()`
+- `createContext()`
+- `useReducer()`
+- `localStorage`
+- Scalable `WebSocket` connection (Apollo)
+    - [Split communication by operation (recommended)](https://www.apollographql.com/docs/react/data/subscriptions/#3-split-communication-by-operation-recommended)
 
 # Getting Started with Create React App
 
