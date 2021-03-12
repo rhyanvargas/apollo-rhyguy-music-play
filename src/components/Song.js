@@ -1,4 +1,5 @@
 
+import { useMutation } from "@apollo/client";
 import {
 	Card,
 	CardContent,
@@ -11,6 +12,8 @@ import {
 import { PlayArrow, Save, Pause } from "@material-ui/icons";
 import React, { useContext, useEffect, useState } from "react";
 import {SongContext} from '../App'
+import {queueItemsVar} from '../graphql/cache'
+import {storeInLocalStorage} from '../utilities'
 
 const useStyles = makeStyles((theme) => ({
 	card: {
@@ -28,10 +31,8 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-
 const Song = ({ song }) => {
 	const { id,title, thumbnail, artist } = song;
-    
     const {state, dispatch} = useContext(SongContext)
     const [songPlaying, setSongPlaying] = useState(false)
 
@@ -41,12 +42,24 @@ const Song = ({ song }) => {
     }, [state.isPlaying,state.song.id, id])
 
 
+	const handleAddOrRemoveFromQueue = ()=>{
+		if(!queueItemsVar().includes(song)){
+			queueItemsVar([...queueItemsVar(), song]);
+			storeInLocalStorage('queue',queueItemsVar());
+		}
+		else	
+			alert('This song is already in the queue')
+	}
+
 	const handleTogglePlay = () => {
         dispatch({type:"SET_SONG" , payload: {song}});
 		dispatch(state.isPlaying ? {type: "PAUSE_SONG"} : {type: "PLAY_SONG"});
 	}
     
 	const classes = useStyles();
+
+	
+
 	return (
 		<Card className={classes.card}>
 			<CardMedia className={classes.thumbnail} image={thumbnail} />
@@ -67,7 +80,7 @@ const Song = ({ song }) => {
 				<IconButton onClick={handleTogglePlay} size="small" color="primary">
 					{songPlaying ? <Pause /> : <PlayArrow />}
 				</IconButton>
-				<IconButton size="small" color="secondary">
+				<IconButton onClick={handleAddOrRemoveFromQueue} size="small" color="secondary">
 					<Save />
 				</IconButton>
 			</CardActions>

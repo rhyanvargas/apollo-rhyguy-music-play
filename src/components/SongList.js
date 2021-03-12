@@ -1,12 +1,13 @@
-import { useSubscription } from "@apollo/react-hooks";
+import { useQuery, useSubscription } from "@apollo/react-hooks";
 import Song from "./Song";
 import React from "react";
 import { GET_SONGS } from "../graphql/subscriptions";
 import { CircularProgress } from "@material-ui/core";
+import {queueItemsVar} from '../graphql/cache'
 
 export default function SongList() {
 	const { data, loading, error } = useSubscription(GET_SONGS);
-
+	
 	if (loading) {
 		return (
 			<div

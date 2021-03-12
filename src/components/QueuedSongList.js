@@ -1,13 +1,16 @@
 import { Typography } from "@material-ui/core";
-import React from "react";
+import {React} from "react";
 import QueuedSong from "./QueuedSong";
 
-export default function QueuedSongList() {
+export default function QueuedSongList({queue}) {
+	console.log({queue});
+
 	const song = {
 		title: "Purple Rain",
 		artist: "Jimmy Hendrix",
 		thumbnail: "http://unsplash.it/g/500?random&blur&gravity=center",
 	};
+	
 	return (
 		<div>
 			<Typography color="textSecondary" variant="button">
