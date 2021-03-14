@@ -16,6 +16,7 @@ To implement MaterialUI custom themeing to a React App and utilize graphQL queri
 - `createContext()`
 - `useReducer()`
 - `localStorage`
+- [Apollo - Reactive Variables](https://www.apollographql.com/docs/react/local-state/reactive-variables/)
 - Scalable `WebSocket` connection (Apollo)
     - [Split communication by operation (recommended)](https://www.apollographql.com/docs/react/data/subscriptions/#3-split-communication-by-operation-recommended)
 

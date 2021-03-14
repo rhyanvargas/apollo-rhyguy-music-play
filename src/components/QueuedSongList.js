@@ -1,24 +1,22 @@
 import { Typography } from "@material-ui/core";
-import {React} from "react";
+import { React, useEffect, useState } from "react";
 import QueuedSong from "./QueuedSong";
+import { queueItemsVar } from "../graphql/cache";
+
 
 export default function QueuedSongList({queue}) {
-	console.log({queue});
 
-	const song = {
-		title: "Purple Rain",
-		artist: "Jimmy Hendrix",
-		thumbnail: "http://unsplash.it/g/500?random&blur&gravity=center",
-	};
-	
 	return (
 		<div>
 			<Typography color="textSecondary" variant="button">
-				QUEUE(5)
+				QUEUE({queue?.length})
+				{/* {queueItemsVar() && queueItemsVar().length || JSON.parse(JSON.parse(localStorage.getItem('queue'))).length} */}
 			</Typography>
-			{Array.from({ length: 5 }, () => song).map((song, i) => (
-				<QueuedSong key={i} song={song} />
-			))}
+			{queue &&
+				queue.map((song, i) => (
+					<QueuedSong key={song.id} song={song} />
+				))
+			}
 		</div>
 	);
 }

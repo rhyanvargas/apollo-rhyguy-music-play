@@ -1,4 +1,3 @@
-
 import { useMutation } from "@apollo/client";
 import {
 	Card,
@@ -8,12 +7,15 @@ import {
 	CardActions,
 	IconButton,
 	makeStyles,
+	// CircularProgress,
 } from "@material-ui/core";
 import { PlayArrow, Save, Pause } from "@material-ui/icons";
 import React, { useContext, useEffect, useState } from "react";
-import {SongContext} from '../App'
-import {queueItemsVar} from '../graphql/cache'
-import {storeInLocalStorage} from '../utilities'
+import { SongContext } from "../App";
+import { queueItemsVar } from "../graphql/cache";
+import { storeInLocalStorage } from "../utilities";
+import { ADD_OR_REMOVE_FROM_QUEUE } from "../graphql/mutations";
+import { GET_QUEUED_SONGS } from "../graphql/queries";
 
 const useStyles = makeStyles((theme) => ({
 	card: {
@@ -23,7 +25,9 @@ const useStyles = makeStyles((theme) => ({
 	},
 	thumbnail: {
 		objectFit: "cover",
-		width: 140,
+		width: "100%",
+		maxWidth: 140,
+		minWidth: 100,
 		height: 140,
 	},
 	content: {
@@ -31,34 +35,83 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const Song = ({ song }) => {
-	const { id,title, thumbnail, artist } = song;
-    const {state, dispatch} = useContext(SongContext)
-    const [songPlaying, setSongPlaying] = useState(false)
-
-    useEffect(() => {
-        const isSongPlaying = state.isPlaying && state.song.id === id;
-        setSongPlaying(isSongPlaying)
-    }, [state.isPlaying,state.song.id, id])
-
-
-	const handleAddOrRemoveFromQueue = ()=>{
-		if(!queueItemsVar().includes(song)){
-			queueItemsVar([...queueItemsVar(), song]);
-			storeInLocalStorage('queue',queueItemsVar());
+const ToggleQueueButton = ({ song }) => {
+	const [addOrRemoveFromQueue, { loading, error }] = useMutation(
+		ADD_OR_REMOVE_FROM_QUEUE,
+		{
+			// update(cache, {data}) {
+			// 	const newItemFromResponse = data?.addOrRemoveFromQueue
+			// 	const existingItems = cache.readQuery({
+			// 		query: GET_QUEUED_SONGS
+			// 	})
+			// 	console.log('__APOLLO_CACHE: ', {existingItems})
+			// cache.writeQuery({
+			// 	query: GET_QUEUED_SONGS,
+			// 	data: {
+			// 		songs: [...existingItems?.songs, newItemFromResponse]
+			// 	}
+			// })
+			// }
 		}
-		else	
-			alert('This song is already in the queue')
-	}
+	);
+	if (loading) console.log("updating queue...");
+	if (error) console.error("Error Updating queue...", error);
 
-	const handleTogglePlay = () => {
-        dispatch({type:"SET_SONG" , payload: {song}});
-		dispatch(state.isPlaying ? {type: "PAUSE_SONG"} : {type: "PLAY_SONG"});
-	}
-    
+	const [isInQueue, toggleQueueItem] = useState(false);
+
+	const handleToggleClick = async () => {
+		if (song) {
+			// Add new song to reactive variable, along with existing queue items (if exists)
+			const newQueueItems = queueItemsVar(
+				isInQueue
+					? queueItemsVar().filter((item) => item.id !== song.id)
+					: [...queueItemsVar(), song]
+			);
+
+			await new Promise((resolve) => resolve(newQueueItems));
+
+			// Store updated queue in localstorage
+			// ...todo...
+
+			// Update the cache
+			await addOrRemoveFromQueue({
+				variables: { input: { ...song }, __typename: "Song" },
+			});
+
+			toggleQueueItem(!isInQueue);
+			alert(`${song.title} added to the Queue!`);
+			console.log("queue cache: ", queueItemsVar());
+			console.log("LocalStorage: ", localStorage.getItem.length);
+		}
+	};
+
+	return (
+		<IconButton
+			onClick={handleToggleClick}
+			size="small"
+			color="secondary"
+			disabled={isInQueue}
+		>
+			<Save />
+		</IconButton>
+	);
+};
+
+const Song = ({ song }) => {
+	const { id, title, thumbnail, artist } = song;
+	const { state, dispatch } = useContext(SongContext);
+	const [songPlaying, setSongPlaying] = useState(false);
 	const classes = useStyles();
 
-	
+	useEffect(() => {
+		const isSongPlaying = state.isPlaying && state.song.id === id;
+		setSongPlaying(isSongPlaying);
+	}, [state.isPlaying, state.song.id, id]);
+
+	const handleTogglePlay = () => {
+		dispatch({ type: "SET_SONG", payload: { song } });
+		dispatch(state.isPlaying ? { type: "PAUSE_SONG" } : { type: "PLAY_SONG" });
+	};
 
 	return (
 		<Card className={classes.card}>
@@ -80,12 +133,10 @@ const Song = ({ song }) => {
 				<IconButton onClick={handleTogglePlay} size="small" color="primary">
 					{songPlaying ? <Pause /> : <PlayArrow />}
 				</IconButton>
-				<IconButton onClick={handleAddOrRemoveFromQueue} size="small" color="secondary">
-					<Save />
-				</IconButton>
+				<ToggleQueueButton song={song} />
 			</CardActions>
 		</Card>
 	);
-}
+};
 
-export default Song
+export default Song;

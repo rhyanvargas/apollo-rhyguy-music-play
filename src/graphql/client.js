@@ -67,16 +67,8 @@ const client = new ApolloClient({
   typeDefs
 })
 
-/* Why I passed in a Loca-only field into queue, instead of setting default value to [] :
-* https://www.apollographql.com/docs/react/local-state/managing-state-with-field-policies/#storing-local-state-in-the-cache
-*/
-cache.writeQuery({
-  query: GET_QUEUED_SONGS,
-  data: {
-    queue: queueItemsVar() 
-  },
-});
 
 
+console.log('LocalStorage: ', localStorage.getItem.length);
 
 export default client;

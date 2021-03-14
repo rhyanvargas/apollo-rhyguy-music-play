@@ -47,6 +47,7 @@ export default function SongPlayer() {
 
 	const {data} = useQuery(GET_QUEUED_SONGS)
 
+
 	const {state,dispatch} = useContext(SongContext)
 	const {artist, title,thumbnail, duration, id } = state.song
 	const classes = useStyles();
