@@ -68,7 +68,4 @@ const client = new ApolloClient({
 })
 
 
-
-console.log('LocalStorage: ', localStorage.getItem.length);
-
 export default client;

@@ -1,3 +1,5 @@
+import {queueItemsVar} from './graphql/cache'
+
 export const storeInLocalStorage = async (keyString,dataValue) => {
     let queueArray = [];
     let localItem = await new Promise ((resolve) => resolve(localStorage.getItem(keyString)));
@@ -11,4 +13,11 @@ export const storeInLocalStorage = async (keyString,dataValue) => {
 
     // push new array to localStorage
     localStorage.setItem(keyString,JSON.stringify(queueArray));
+}
+
+
+export const addOrRemoveSongFrom = (song) => {
+    const localStorageArray = localStorage.getItem('queue') ? JSON.parse(localStorage.getItem('queue')) : []
+    const cache = queueItemsVar();
+    console.log(cache);
 }

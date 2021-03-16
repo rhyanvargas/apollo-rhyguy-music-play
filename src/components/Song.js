@@ -16,6 +16,7 @@ import { queueItemsVar } from "../graphql/cache";
 import { storeInLocalStorage } from "../utilities";
 import { ADD_OR_REMOVE_FROM_QUEUE } from "../graphql/mutations";
 import { GET_QUEUED_SONGS } from "../graphql/queries";
+import AddRemoveQueueButton from "./AddRemoveQueueButton";
 
 const useStyles = makeStyles((theme) => ({
 	card: {
@@ -35,67 +36,6 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const ToggleQueueButton = ({ song }) => {
-	const [addOrRemoveFromQueue, { loading, error }] = useMutation(
-		ADD_OR_REMOVE_FROM_QUEUE,
-		{
-			// update(cache, {data}) {
-			// 	const newItemFromResponse = data?.addOrRemoveFromQueue
-			// 	const existingItems = cache.readQuery({
-			// 		query: GET_QUEUED_SONGS
-			// 	})
-			// 	console.log('__APOLLO_CACHE: ', {existingItems})
-			// cache.writeQuery({
-			// 	query: GET_QUEUED_SONGS,
-			// 	data: {
-			// 		songs: [...existingItems?.songs, newItemFromResponse]
-			// 	}
-			// })
-			// }
-		}
-	);
-	if (loading) console.log("updating queue...");
-	if (error) console.error("Error Updating queue...", error);
-
-	const [isInQueue, toggleQueueItem] = useState(false);
-
-	const handleToggleClick = async () => {
-		if (song) {
-			// Add new song to reactive variable, along with existing queue items (if exists)
-			const newQueueItems = queueItemsVar(
-				isInQueue
-					? queueItemsVar().filter((item) => item.id !== song.id)
-					: [...queueItemsVar(), song]
-			);
-
-			await new Promise((resolve) => resolve(newQueueItems));
-
-			// Store updated queue in localstorage
-			// ...todo...
-
-			// Update the cache
-			await addOrRemoveFromQueue({
-				variables: { input: { ...song }, __typename: "Song" },
-			});
-
-			toggleQueueItem(!isInQueue);
-			alert(`${song.title} added to the Queue!`);
-			console.log("queue cache: ", queueItemsVar());
-			console.log("LocalStorage: ", localStorage.getItem.length);
-		}
-	};
-
-	return (
-		<IconButton
-			onClick={handleToggleClick}
-			size="small"
-			color="secondary"
-			disabled={isInQueue}
-		>
-			<Save />
-		</IconButton>
-	);
-};
 
 const Song = ({ song }) => {
 	const { id, title, thumbnail, artist } = song;
@@ -133,7 +73,7 @@ const Song = ({ song }) => {
 				<IconButton onClick={handleTogglePlay} size="small" color="primary">
 					{songPlaying ? <Pause /> : <PlayArrow />}
 				</IconButton>
-				<ToggleQueueButton song={song} />
+				<AddRemoveQueueButton song={song} />
 			</CardActions>
 		</Card>
 	);

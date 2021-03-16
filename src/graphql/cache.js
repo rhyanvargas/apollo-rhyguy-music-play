@@ -5,11 +5,11 @@ export const cache = new InMemoryCache({
     typePolicies: {
         Query: {
             fields: {
-                queue: {
-                    read(){
+                queue: { // returns [Song]
+                    read() {
                         return queueItemsVar();
-                    },
-                    // merge (existing, incoming) {}
+                    }
+
                 }
             }
         }
