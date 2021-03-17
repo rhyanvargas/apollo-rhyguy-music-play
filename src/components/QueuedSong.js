@@ -1,4 +1,3 @@
-import { useMutation } from "@apollo/client";
 import {
 	Avatar,
 	IconButton,
@@ -10,10 +9,10 @@ import {
 	makeStyles,
 } from "@material-ui/core";
 import { Delete } from "@material-ui/icons";
-import React from "react";
-import { ADD_OR_REMOVE_FROM_QUEUE } from "../graphql/mutations";
-import {queueItemsVar} from '../graphql/cache'
-import { GET_QUEUED_SONGS } from "../graphql/queries";
+import React, { useContext } from "react";
+import { SongContext } from "../App";
+import { ACTION_TYPES } from "../reducer";
+import { removeSongFromQueue } from "../utilities";
 
 const useStyles = makeStyles({
 	container: {
@@ -29,17 +28,16 @@ export default function QueuedSong({ song }) {
 	const { title, artist, thumbnail } = song;
 	const classes = useStyles();
 	const { container } = classes;
-	// const [removeSongFromQueue] = useMutation(ADD_OR_REMOVE_FROM_QUEUE)
+	const { dispatch } = useContext(SongContext);
 
 	const handleRemoveFromQueue = () => {
-
-		console.log('REMOVE ME HERE!');
-	}
+		dispatch({ type: ACTION_TYPES.REMOVE_FROM_QUEUE, payload: { song } });
+	};
 
 	return (
 		<>
 			<List dense className={container}>
-				<ListItem >
+				<ListItem>
 					<ListItemAvatar>
 						<Avatar>
 							<img src={thumbnail} alt={title} />
@@ -48,11 +46,15 @@ export default function QueuedSong({ song }) {
 					<ListItemText
 						primary={title}
 						secondary={artist}
-						secondaryTypographyProps={{noWrap: true}}
+						secondaryTypographyProps={{ noWrap: true }}
 					/>
 				</ListItem>
 				<ListItemSecondaryAction>
-					<IconButton onClick={handleRemoveFromQueue} edge="end" aria-label="delete">
+					<IconButton
+						onClick={handleRemoveFromQueue}
+						edge="end"
+						aria-label="delete"
+					>
 						<Delete color="error" />
 					</IconButton>
 				</ListItemSecondaryAction>

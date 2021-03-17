@@ -1,4 +1,3 @@
-import { useMutation } from "@apollo/client";
 import {
 	Card,
 	CardContent,
@@ -9,14 +8,12 @@ import {
 	makeStyles,
 	// CircularProgress,
 } from "@material-ui/core";
-import { PlayArrow, Save, Pause } from "@material-ui/icons";
+import { PlayArrow, Save, Pause, Delete } from "@material-ui/icons";
 import React, { useContext, useEffect, useState } from "react";
 import { SongContext } from "../App";
 import { queueItemsVar } from "../graphql/cache";
-import { storeInLocalStorage } from "../utilities";
-import { ADD_OR_REMOVE_FROM_QUEUE } from "../graphql/mutations";
-import { GET_QUEUED_SONGS } from "../graphql/queries";
-import AddRemoveQueueButton from "./AddRemoveQueueButton";
+import { ACTION_TYPES } from "../reducer";
+import { addSongToQueue, removeSongFromQueue } from "../utilities";
 
 const useStyles = makeStyles((theme) => ({
 	card: {
@@ -36,21 +33,36 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-
 const Song = ({ song }) => {
 	const { id, title, thumbnail, artist } = song;
 	const { state, dispatch } = useContext(SongContext);
 	const [songPlaying, setSongPlaying] = useState(false);
+	
+
 	const classes = useStyles();
 
 	useEffect(() => {
 		const isSongPlaying = state.isPlaying && state.song.id === id;
+
 		setSongPlaying(isSongPlaying);
-	}, [state.isPlaying, state.song.id, id]);
+	}, [state.isPlaying, state.song.id, id, song]);
 
 	const handleTogglePlay = () => {
-		dispatch({ type: "SET_SONG", payload: { song } });
-		dispatch(state.isPlaying ? { type: "PAUSE_SONG" } : { type: "PLAY_SONG" });
+		dispatch({ type: ACTION_TYPES.SET_SONG, payload: { song } });
+		dispatch(
+			state.isPlaying
+				? { type: ACTION_TYPES.PAUSE_SONG }
+				: { type: ACTION_TYPES.PLAY_SONG }
+		);
+	};
+
+	const handleToggleQueue = () => {
+		dispatch({ type: ACTION_TYPES.SET_SONG, payload: { song } });
+		if (!state.IsInQueue) {
+			dispatch({ type: ACTION_TYPES.ADD_TO_QUEUE, payload: { song } });
+		} else {
+			dispatch({ type: ACTION_TYPES.REMOVE_FROM_QUEUE, payload: { song } });
+		}
 	};
 
 	return (
@@ -73,7 +85,14 @@ const Song = ({ song }) => {
 				<IconButton onClick={handleTogglePlay} size="small" color="primary">
 					{songPlaying ? <Pause /> : <PlayArrow />}
 				</IconButton>
-				<AddRemoveQueueButton song={song} />
+				<IconButton
+					color="secondary"
+					disabled={queueItemsVar() !== null && queueItemsVar().includes(song)}
+					onClick={handleToggleQueue}
+					size="small"
+				>
+					<Save />
+				</IconButton>
 			</CardActions>
 		</Card>
 	);

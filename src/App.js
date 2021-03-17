@@ -8,24 +8,22 @@ import { createMuiTheme, makeStyles, useTheme } from "@material-ui/core/styles";
 import { MuiThemeProvider, CssBaseline } from "@material-ui/core";
 import { themeDark, themeMain } from "./theme";
 import "./App.css";
-import { ProvidedRequiredArgumentsOnDirectivesRule } from "graphql/validation/rules/ProvidedRequiredArgumentsRule";
-import songReducer from './reducer'
-
+import songReducer from "./reducer";
 
 export const SongContext = createContext({
 	song: {
-		id: "03a3433f-9c0e-433a-a12a-dc0af15d6eae",
-		artist: "joji",
-		thumbnail: "http://img.youtube.com/vi/sADmwWhU5ZM/0.jpg",
-		title: "WORLD$TAR MONEY",
-		duration: 197,
-	}
-})
+		id: "",
+		artist: "",
+		thumbnail: "",
+		title: "",
+		duration: 0,
+		isInQueue: false,
+	},
+});
 
 function App() {
-
 	const initialSongState = useContext(SongContext);
-	const [state, dispatch] = useReducer(songReducer, initialSongState)
+	const [state, dispatch] = useReducer(songReducer, initialSongState);
 
 	const [theme, setTheme] = useState(true);
 
@@ -36,9 +34,7 @@ function App() {
 	const isLessThanSmBreakpoint = useMediaQuery(myTheme.breakpoints.down("sm"));
 
 	const useStyles = makeStyles({
-    header: {
-
-    },
+		header: {},
 		gridFixed: isLessThanSmBreakpoint
 			? {
 					position: "fixed",
@@ -59,38 +55,31 @@ function App() {
 		setTheme(!theme);
 	};
 
-	//check for Navigation Timing API support
-	if (window.performance) {
-		console.info("window.performance works fine on this browser");
-	}
-	console.info(performance.navigation.type);
-	if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
-		console.info( "This page is reloaded" );
-	} else {
-		console.info( "This page is not reloaded");
-	}
-
 	return (
 		<>
-		<SongContext.Provider value={{state, dispatch}}>
-			<MuiThemeProvider theme={appliedTheme}>
-				<CssBaseline />
-				<Grid container >
-					<Hidden only="xs">
-						<Grid item xs={12}>
-							<Header className={classes.header} handleChangeTheme={handleChangeTheme} theme={theme} />
+			<SongContext.Provider value={{ state, dispatch }}>
+				<MuiThemeProvider theme={appliedTheme}>
+					<CssBaseline />
+					<Grid container>
+						<Hidden only="xs">
+							<Grid item xs={12}>
+								<Header
+									className={classes.header}
+									handleChangeTheme={handleChangeTheme}
+									theme={theme}
+								/>
+							</Grid>
+						</Hidden>
+						<Grid item xs={12} md={6}>
+							<AddSong />
+							<SongList />
 						</Grid>
-					</Hidden>
-					<Grid item xs={12} md={6}>
-						<AddSong />
-						<SongList />
+						<Grid className={classes.gridFixed} item xs={12} md={5}>
+							<SongPlayer />
+						</Grid>
 					</Grid>
-					<Grid className={classes.gridFixed} item xs={12} md={5}>
-						<SongPlayer />
-					</Grid>
-				</Grid>
-			</MuiThemeProvider>
-		</SongContext.Provider>
+				</MuiThemeProvider>
+			</SongContext.Provider>
 		</>
 	);
 }
