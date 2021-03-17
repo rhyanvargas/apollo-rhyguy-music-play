@@ -12,7 +12,6 @@ import { Delete } from "@material-ui/icons";
 import React, { useContext } from "react";
 import { SongContext } from "../App";
 import { ACTION_TYPES } from "../reducer";
-import { removeSongFromQueue } from "../utilities";
 
 const useStyles = makeStyles({
 	container: {

@@ -35,8 +35,7 @@ const songReducer = (state, action) => {
 			removeSongFromQueue(action.payload.song);
 			return {
 				...state,
-				song: action.payload.song,
-            	isInQueue: false,
+				isInQueue: false,
 			};
 		}
 
@@ -44,9 +43,8 @@ const songReducer = (state, action) => {
 			addSongToQueue(action.payload.song);
 			return {
 				...state,
-				song: action.payload.song,
-            	isInQueue: true,
-         	}
+				isInQueue: true,
+			};
 		}
 
 		default:

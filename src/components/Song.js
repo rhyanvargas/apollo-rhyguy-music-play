@@ -8,12 +8,11 @@ import {
 	makeStyles,
 	// CircularProgress,
 } from "@material-ui/core";
-import { PlayArrow, Save, Pause, Delete } from "@material-ui/icons";
+import { PlayArrow, Save, Pause } from "@material-ui/icons";
 import React, { useContext, useEffect, useState } from "react";
 import { SongContext } from "../App";
 import { queueItemsVar } from "../graphql/cache";
 import { ACTION_TYPES } from "../reducer";
-import { addSongToQueue, removeSongFromQueue } from "../utilities";
 
 const useStyles = makeStyles((theme) => ({
 	card: {
@@ -37,7 +36,6 @@ const Song = ({ song }) => {
 	const { id, title, thumbnail, artist } = song;
 	const { state, dispatch } = useContext(SongContext);
 	const [songPlaying, setSongPlaying] = useState(false);
-	
 
 	const classes = useStyles();
 
@@ -57,7 +55,6 @@ const Song = ({ song }) => {
 	};
 
 	const handleToggleQueue = () => {
-		dispatch({ type: ACTION_TYPES.SET_SONG, payload: { song } });
 		if (!state.IsInQueue) {
 			dispatch({ type: ACTION_TYPES.ADD_TO_QUEUE, payload: { song } });
 		} else {

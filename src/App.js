@@ -12,12 +12,12 @@ import songReducer from "./reducer";
 
 export const SongContext = createContext({
 	song: {
-		id: "",
 		artist: "",
+		duration: 0,
+		id: "",
 		thumbnail: "",
 		title: "",
-		duration: 0,
-		isInQueue: false,
+		url: "",
 	},
 });
 
