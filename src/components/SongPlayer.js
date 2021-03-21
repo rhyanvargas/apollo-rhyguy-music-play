@@ -48,6 +48,7 @@ export default function SongPlayer() {
 	const { data } = useQuery(GET_QUEUED_SONGS);
 	const { state, dispatch } = useContext(SongContext);
 	const { artist, title, thumbnail, duration, id } = state.song;
+	const isSongLoaded = id ? true : false;
 	const [played, setplayed] = useState(0);
 	const [playedSeconds, setplayedSeconds] = useState(0);
 	const [seeking, setSeeking] = useState(false);
@@ -63,10 +64,10 @@ export default function SongPlayer() {
 	useEffect(() => {
 		const nextSong = data.queue[positionInQueue + 1];
 		if (played >= 0.99 && nextSong) {
-				setplayed(0);
-				dispatch({ type: ACTION_TYPES.SET_SONG, payload: { song:  nextSong  } });
-		} 
-	}, [data.queue,played, dispatch,positionInQueue,state.song]);
+			setplayed(0);
+			dispatch({ type: ACTION_TYPES.SET_SONG, payload: { song: nextSong } });
+		}
+	}, [data.queue, played, dispatch, positionInQueue, state.song]);
 
 	const handleTogglePlay = () => {
 		dispatch(state.isPlaying ? { type: "PAUSE_SONG" } : { type: "PLAY_SONG" });
@@ -90,35 +91,47 @@ export default function SongPlayer() {
 	};
 
 	const handlePlayPreviousSong = () => {
-		const prevSong = data.queue[positionInQueue - 1]
-		if(prevSong) {
-			dispatch({type: ACTION_TYPES.SET_SONG, payload: {song: prevSong}})
+		const prevSong = data.queue[positionInQueue - 1];
+		if (prevSong) {
+			dispatch({ type: ACTION_TYPES.SET_SONG, payload: { song: prevSong } });
 		}
-	}
+	};
 
 	const handlePlayNextSong = () => {
 		const nextSong = data.queue[positionInQueue + 1];
-		if(nextSong) {
-			dispatch({type: ACTION_TYPES.SET_SONG, payload: {song: nextSong}})
+		if (nextSong) {
+			dispatch({ type: ACTION_TYPES.SET_SONG, payload: { song: nextSong } });
 		}
-	}
+	};
 
-	return (
+	const songCard = (
 		<>
 			<Card className={classes.container}>
 				<div className={classes.details}>
 					<div className={classes.content}>
 						<CardContent>
-							<Typography variant="h5" component="h3">
-								{title}
-							</Typography>
-							<Typography variant="subtitle1" component="p">
-								{artist}
-							</Typography>
+							{isSongLoaded ? 
+							<>
+								<Typography variant="h5" component="h3">
+									{title}
+								</Typography>
+								<Typography variant="subtitle1" component="p">
+									{artist}
+								</Typography>
+							</>
+							: 
+								<Typography variant="h5" component="h3">
+									Pick a song to play...
+								</Typography>
+
+							}
 						</CardContent>
 					</div>
 					<div className={classes.controls}>
-						<IconButton onClick={handlePlayPreviousSong} aria-label="play/pause">
+						<IconButton
+							onClick={handlePlayPreviousSong}
+							aria-label="play/pause"
+						>
 							<SkipPrevious />
 						</IconButton>
 						<IconButton onClick={handleTogglePlay} aria-label="play/pause">
@@ -159,11 +172,13 @@ export default function SongPlayer() {
 					url={state.song.url}
 					playing={state.isPlaying}
 				/>
-				<CardMedia className={classes.image} image={thumbnail} />
+				{isSongLoaded && <CardMedia className={classes.image} image={thumbnail} /> }
 			</Card>
 			<Hidden smDown={true}>
 				<QueuedSongList queue={data.queue} />
 			</Hidden>
 		</>
 	);
+
+	return <>{songCard}</>;
 }
