@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 		justifyContent: "space-between",
 	},
 	details: {
-		flex: ` 0 1 auto`,
+		flex: ` 1 1 auto`,
 		flexDirection: "column",
 		padding: `10px 20px`,
 	},

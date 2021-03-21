@@ -34,18 +34,24 @@ function App() {
 	const isLessThanSmBreakpoint = useMediaQuery(myTheme.breakpoints.down("sm"));
 
 	const useStyles = makeStyles({
-		header: {},
+		header: {
+
+		},
+		gridColumn: {
+			marginTop: '4rem'
+		},
 		gridFixed: isLessThanSmBreakpoint
 			? {
 					position: "fixed",
 					bottom: 0,
-					width: "100%",
+				`````	width: "100%",
+					
 			  }
 			: {
 					position: "fixed",
 					right: 0,
 					width: "100%",
-					top: 70,
+					top: 100,
 			  },
 	});
 
@@ -60,7 +66,7 @@ function App() {
 			<SongContext.Provider value={{ state, dispatch }}>
 				<MuiThemeProvider theme={appliedTheme}>
 					<CssBaseline />
-					<Grid container>
+					<Grid className={classes.gridContainer}container>
 						<Hidden only="xs">
 							<Grid item xs={12}>
 								<Header
@@ -70,7 +76,7 @@ function App() {
 								/>
 							</Grid>
 						</Hidden>
-						<Grid item xs={12} md={6}>
+						<Grid className={classes.gridColumn} item xs={12} md={6}>
 							<AddSong />
 							<SongList />
 						</Grid>

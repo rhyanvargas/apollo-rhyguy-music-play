@@ -13,21 +13,21 @@ import React, { useContext } from "react";
 import { SongContext } from "../App";
 import { ACTION_TYPES } from "../reducer";
 
-const useStyles = makeStyles({
-	container: {
-		display: "flex",
-		justifyContent: "space-between",
-	},
-	imageWrapper: {},
-	content: {},
-	iconWrapper: {},
-});
-
 export default function QueuedSong({ song }) {
+	const { state, dispatch } = useContext(SongContext);
 	const { title, artist, thumbnail } = song;
+
+	const useStyles = makeStyles(theme => ({
+		container: {
+			display: "flex",
+			justifyContent: "space-between",
+		},
+		imageWrapper: {},
+
+		iconWrapper: {},
+	}));
 	const classes = useStyles();
-	const { container } = classes;
-	const { dispatch } = useContext(SongContext);
+	const { container,  } = classes;
 
 	const handleRemoveFromQueue = () => {
 		dispatch({ type: ACTION_TYPES.REMOVE_FROM_QUEUE, payload: { song } });
@@ -36,7 +36,7 @@ export default function QueuedSong({ song }) {
 	return (
 		<>
 			<List dense className={container}>
-				<ListItem>
+				<ListItem >
 					<ListItemAvatar>
 						<Avatar>
 							<img src={thumbnail} alt={title} />

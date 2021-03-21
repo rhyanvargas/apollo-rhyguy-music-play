@@ -7,6 +7,7 @@ const useStyles = makeStyles(theme =>({
     root: {
         flexGrow: 1,
     },
+    header: {},
     title: {
         marginLeft: theme.spacing(1),
         flexGrow: 1
@@ -21,7 +22,7 @@ export default function Header({handleChangeTheme, theme}) {
     const handleIconThemeToggle = () => {handleChangeTheme();}
 
     return (
-        <AppBar color="primary" position="sticky">
+        <AppBar className={classes.header} color="primary" position="sticky">
             <Toolbar>
                 <IconButton 
                     edge="start"
