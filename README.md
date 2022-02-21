@@ -15,12 +15,12 @@ To implement MaterialUI custom themeing to a React App and utilize graphQL queri
 - `useContext()`
 - `createContext()`
 - `useReducer()`
-- `localStorage`
 - [Apollo - Reactive Variables](https://www.apollographql.com/docs/react/local-state/reactive-variables/)
 - Scalable `WebSocket` connection (Apollo)
     - [Split communication by operation (recommended)](https://www.apollographql.com/docs/react/data/subscriptions/#3-split-communication-by-operation-recommended)
+- *TODO* Implement working `localStorage` to utilize cache and minimize network requests
 
-# Getting Started with Create React App
+# Get Started
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -29,7 +29,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 In the project directory, you can run:
 
 ### 1. `npm install`
-### 2. `npm run start`
+*Run Locally:*
+### 2. `npm run dev`
+*Deploy script (via `serve`):*
+### 2b. `npm run start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
