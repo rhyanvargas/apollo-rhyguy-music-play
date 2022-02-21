@@ -4,7 +4,7 @@ import AddSong from "./components/AddSong";
 import Header from "./components/Header";
 import SongList from "./components/SongList";
 import SongPlayer from "./components/SongPlayer";
-import { createMuiTheme, makeStyles, useTheme } from "@material-ui/core/styles";
+import { createTheme, makeStyles, useTheme } from "@material-ui/core/styles";
 import { MuiThemeProvider, CssBaseline } from "@material-ui/core";
 import { themeDark, themeMain } from "./theme";
 import "./App.css";
@@ -27,7 +27,7 @@ function App() {
 
 	const [theme, setTheme] = useState(true);
 
-	const appliedTheme = createMuiTheme(!theme ? themeDark : themeMain);
+	const appliedTheme = createTheme(!theme ? themeDark : themeMain);
 
 	const myTheme = useTheme();
 
@@ -42,17 +42,17 @@ function App() {
 		},
 		gridFixed: isLessThanSmBreakpoint
 			? {
-					position: "fixed",
-					bottom: 0,
-					width: "100%",
-					
-			  }
+				position: "fixed",
+				bottom: 0,
+				width: "100%",
+
+			}
 			: {
-					position: "fixed",
-					right: 0,
-					width: "100%",
-					top: 100,
-			  },
+				position: "fixed",
+				right: 0,
+				width: "100%",
+				top: 100,
+			},
 	});
 
 	const classes = useStyles();
@@ -66,7 +66,7 @@ function App() {
 			<SongContext.Provider value={{ state, dispatch }}>
 				<MuiThemeProvider theme={appliedTheme}>
 					<CssBaseline />
-					<Grid className={classes.gridContainer}container>
+					<Grid className={classes.gridContainer} container>
 						<Hidden only="xs">
 							<Grid item xs={12}>
 								<Header
