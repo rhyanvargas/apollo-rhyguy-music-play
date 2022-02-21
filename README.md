@@ -32,7 +32,7 @@ In the project directory, you can run:
 *Run Locally:*
 ### 2. `npm run dev`
 *Deploy script (via `serve`):*
-### 2b. `npm run start`
+### 2b. `npm run deploy`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
