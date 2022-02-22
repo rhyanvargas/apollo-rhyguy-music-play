@@ -4,15 +4,15 @@ import { WebSocketLink } from "@apollo/client/link/ws";
 
 import { cache } from "./cache";
 
-const graphURL = "//rhyguy-music-app.hasura.app/v1/graphql";
-// const cache = new InMemoryCache();
+let graphURL = `${process.env.REACT_APP_HASURA_PROJECT_ENDPOINT}/v1/graphql`
+let strippedGraphURL = graphURL.replace(/^https?:/, '');
 
 const httpLink = new HttpLink({
-	uri: `https:${graphURL}`,
+	uri: `${strippedGraphURL}`,
 });
 
 const wsLink = new WebSocketLink({
-	uri: `ws:${graphURL}`,
+	uri: `ws:${strippedGraphURL}`,
 	options: {
 		reconnect: true,
 	},
